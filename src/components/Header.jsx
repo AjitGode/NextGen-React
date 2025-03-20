@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import ScrollProgress from "@/components/ui/scroll-progress";
-import Logo1 from "../assets/Logo1.png";
+import Logo1 from "../assets/YugTech_Logo.png";
 
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -20,11 +20,11 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo and Branding */}
           <div className="flex-shrink-0 flex items-center space-x-3">
-            {/* <img 
+            <img 
               src={Logo1} 
               alt="Institute Logo" 
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-full transform transition duration-300 hover:scale-110" 
-            /> */}
+            />
             <HashLink 
               to="/#" 
               className="text-xl sm:text-2xl font-bold tracking-tight hover:text-gray-200 transition duration-300"

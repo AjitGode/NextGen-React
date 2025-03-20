@@ -3,9 +3,11 @@ import Swal from "sweetalert2";
 import TextField from "@mui/material/TextField";
 
 const ContactSection = () => {
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
   });
 
@@ -17,8 +19,32 @@ const ContactSection = () => {
     });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phonePattern = /^[6789]\{9}$/;
+
+    if (!formData.name.trim()) newErrors.name = "Full Name is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailPattern.test(formData.email)) {
+      newErrors.email = "Invalid email address";
+    }
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!phonePattern.test(formData.phone)) {
+      newErrors.phone = "Invalid Phone Number";
+    }
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     const backendURL = import.meta.env.VITE_BACKEND_URL;
 
     try {
@@ -51,17 +77,18 @@ const ContactSection = () => {
             `,
           },
         });
-        setFormData({ name: "", email: "", message: "" });
+        setFormData({ name: "", email: "", phone: "", message: "" });
+        setErrors({});
       } else {
-        Swal.fire(
-          "Error",
-          "Failed to send message. Please try again later.",
-          "error"
-        );
+        throw new Error("Failed to send message");
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      Swal.fire("Error", error.message, "error");
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -74,7 +101,7 @@ const ContactSection = () => {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-10">
-          {/* Contact Information (remains the same) */}
+          {/* Contact Information */}
           <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-10 border border-gray-100">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">
               Get in Touch
@@ -87,20 +114,20 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-800 mb-1">Email</h4>
-                  <p className="text-gray-600">contact@institute.com</p>
-                  <p className="text-gray-600">support@institute.com</p>
+                  <p className="text-gray-600">yugtechacademy@gmail.com</p>
+                  
                 </div>
               </div>
 
-              <div className="flex items-start space-x-4">
+              {/* <div className="flex items-start space-x-4">
                 <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-blue-100 text-blue-600">
                   <i className="fas fa-phone text-xl"></i>
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-800 mb-1">Phone</h4>
-                  <p className="text-gray-600">+91 8376556432</p>
+                  <p className="text-gray-600">+91 </p>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex items-start space-x-4">
                 <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-blue-100 text-blue-600">
@@ -139,7 +166,8 @@ const ContactSection = () => {
                 variant="outlined"
                 value={formData.name}
                 onChange={handleChange}
-                required
+                error={!!errors.name}
+                helperText={errors.name}
               />
 
               <TextField
@@ -151,7 +179,22 @@ const ContactSection = () => {
                 variant="outlined"
                 value={formData.email}
                 onChange={handleChange}
-                required
+                error={!!errors.email}
+                helperText={errors.email}
+              />
+
+              <TextField
+                fullWidth
+                id="phone"
+                name="phone"
+                label="Phone"
+                type="tel"
+                inputProps={{ maxLength: 10 }}
+                variant="outlined"
+                value={formData.phone}
+                onChange={handleChange}
+                error={!!errors.phone}
+                helperText={errors.phone}
               />
 
               <TextField
@@ -162,7 +205,8 @@ const ContactSection = () => {
                 variant="outlined"
                 value={formData.message}
                 onChange={handleChange}
-                required
+                error={!!errors.message}
+                helperText={errors.message}
                 multiline
                 rows={5}
               />
