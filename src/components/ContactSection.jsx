@@ -22,7 +22,7 @@ const ContactSection = () => {
   const validateForm = () => {
     const newErrors = {};
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const phonePattern = /^[6789]\{9}$/;
+    const phonePattern = /^[6-9]\d{9}$/;
 
     if (!formData.name.trim()) newErrors.name = "Full Name is required";
     if (!formData.email.trim()) {
