@@ -266,6 +266,7 @@ const EnrollmentForm = ({ closeForm, selectedCourse }) => {
                   <MenuItem value="Previously Worked">Previously Worked</MenuItem>
                   <MenuItem value="Other">Other</MenuItem>
                 </Select>
+              
                 {errors.workingProfession && <FormHelperText>{errors.workingProfession}</FormHelperText>}
               </FormControl>
             </div>
